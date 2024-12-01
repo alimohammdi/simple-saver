@@ -5,7 +5,7 @@ class Database {
     private $host = 'localhost';
     private $username = 'root';
     private $password = '';
-    private $database = 'test_dbs';
+    private $database = 'simple_saver';
     private $connection;
 
     // Constructor to create database connection
@@ -30,7 +30,7 @@ class Database {
         $sql = "INSERT INTO $table ($keys) VALUES ($values)";
         $stmt = $this->connection->prepare($sql);
         $stmt->execute(array_values($data));
-        return $stmt->rowCount();
+        return $this->connection->lastInsertId();
     }
 
     // Method to update data in a table
@@ -68,6 +68,17 @@ class Database {
         $stmt = $this->connection->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+
+    public function getLastMessage($ip){
+        $sql  = "SELECT messages.* FROM messages JOIN users ON users.id = messages.user_id WHERE users.ip = '$ip' ORDER BY id DESC LIMIT 1 ";
+
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute();
+        return  $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    
     }
 
 }
