@@ -1,9 +1,13 @@
 
-<?php 
+<?php
+
+use Academy01\Semej\Semej;
 
 require_once('./Class/Message.php');
 $_message = new Message();
 $ip = $_SERVER['REMOTE_ADDR'];
+$i = 1;
+$lastMessages  =  $_message->getLastMessages($ip); 
 if (isset($_POST['submit'])  &&  $_SERVER['REQUEST_METHOD'] === 'POST'  && !empty($_POST['message'])){
      
 
@@ -37,6 +41,7 @@ if (isset($_POST['submit'])  &&  $_SERVER['REQUEST_METHOD'] === 'POST'  && !empt
                 </header>
         
         <main>
+                <?php   Semej::show() ?>
                 <form action="<?php  htmlspecialchars($_SERVER['PHP_SELF']) ?>" method="POST">
                         <div class="form-group">
                                 <label for="text">Text :</label>
@@ -48,6 +53,36 @@ if (isset($_POST['submit'])  &&  $_SERVER['REQUEST_METHOD'] === 'POST'  && !empt
                         </div>
 
                 </form>
+                <hr>
+                <div class="container mt-3">
+            <h3 class="text-center">     Last Message    </h3>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">agent</th>
+                       
+                        <th scope="col">message</th>
+                    </tr>
+                </thead>
+                <tbody>
+                        <?php 
+                                foreach($lastMessages as $message ):
+                        ?>
+                    <tr>
+                        <th scope="row"><?=   $i ?></th>
+                        <td><?php echo $message['user_agent'] ?></td>
+                        <td><?php echo  $message['message'] ?> </td>
+                    </tr>
+                    <?php 
+                    $i++ ;
+                          endforeach;
+                    ?>
+                    
+                </tbody>
+            </table>
+        </div>
+  
         </main>
         </div>
 

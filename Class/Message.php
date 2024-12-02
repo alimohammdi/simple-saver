@@ -1,7 +1,9 @@
-<?php 
+<?php
+
+use Academy01\Semej\Semej;
 
 require_once 'database.php';
-
+require_once 'vendor/autoload.php';
 class Message {
         protected $connection ; 
 
@@ -36,7 +38,7 @@ class Message {
                 $add_message  = $this->connection->insert('messages' , $messages);
 
                 if ($add_message && $user_id ){
-                        return " پیام شما افزوده شد  ";
+                        Semej::set('success', 'اوکی', 'پیام شما ذخیره شد ');
                 }
   
 
@@ -47,6 +49,15 @@ class Message {
                 $result = $this->connection->getLastMessage($ip);
                 if (count($result) > 0){
                         return $result[0]['message'];
+                }else{
+                        return null;
+                }
+        }
+
+        public function getLastMessages ($ip){
+                $result = $this->connection->getLastMessages($ip);
+                if (count($result) > 0){
+                        return $result ;
                 }else{
                         return null;
                 }
